@@ -1,4 +1,8 @@
+import json
+import urllib2
+
 class MensagemParser:
+
 	mensagem = ""
 
 	def __init__(self, mensagem):
@@ -7,18 +11,22 @@ class MensagemParser:
 	# processa a mensagem recebida do cliente
 	# retorna o processamento do comando
 	def processar(self):
+
 		# se achou o comando \even
 		if self.mensagem.find('\even') > -1:
-			even
+			return self.getPontosDoTime()
 		# se achou o comando \prime
-		elifself.mensagem.find('\prime') > -1:
-			prime
+		elif self.mensagem.find('\prime') > -1:
+			return self.prime()
 		# se nao achou nenhum dos anteriores
 		else:
-			even
+			return self.getPontosDoTime()
 	
-	def prime():
+	def prime(self):
 		print "n is a prime number\n"
+		return 1
 		
-	def even():
-		print "n is an even number\n"
+	def getPontosDoTime(self):
+		resposta = json.load(urllib2.urlopen("https://api.cartolafc.globo.com/time/FeelsGoodMan"))
+		print resposta
+		return resposta['pontos']

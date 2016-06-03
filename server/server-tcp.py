@@ -7,6 +7,7 @@ Exemplo de codigo de um Servidor TCP.
 """
 
 from socket import *
+from MensagemParser import MensagemParser
 
 # Porta que sera utilizada pelo Servidor para aguardar pedidos de conexao
 serverPort = 12000
@@ -27,6 +28,9 @@ while 1:
      connectionSocket, addr = serverSocket.accept()
 
      sentence = connectionSocket.recv(1024)
-     capitalizedSentence = sentence.upper()
-     connectionSocket.send(capitalizedSentence)
+
+     messageParser = MensagemParser(sentence)
+     mensagemRetorno = messageParser.processar()
+
+     connectionSocket.send(mensagemRetorno)
      connectionSocket.close()
