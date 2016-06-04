@@ -29,8 +29,13 @@ while 1:
 
      sentence = connectionSocket.recv(1024)
 
+     # criar thread para processar a requisicao
+
+     # instancia objeto que contem a logica dos comandos implementados
      messageParser = MensagemParser(sentence)
+     # processa o comando passado pelo usuario
      mensagemRetorno = messageParser.processar()
 
+     # fecha o socket
      connectionSocket.send(mensagemRetorno)
      connectionSocket.close()

@@ -1,5 +1,6 @@
 import json
 import urllib2
+from datetime import datetime
 
 class MensagemParser:
 
@@ -12,21 +13,29 @@ class MensagemParser:
 	# retorna o processamento do comando
 	def processar(self):
 
-		# se achou o comando \even
-		if self.mensagem.find('\even') > -1:
-			return self.getPontosDoTime()
-		# se achou o comando \prime
-		elif self.mensagem.find('\prime') > -1:
-			return self.prime()
-		# se nao achou nenhum dos anteriores
+		if self.mensagem.find('\cartola') > -1:
+			palavrasMensagem = self.mensagem.split( )
+			return self.getPontosDoTime( palavrasMensagem[1] )
+		elif self.mensagem.find('\datahora') > -1:
+			return self.getDataHora()
+		elif self.mensagem.find('\donos') > -1:
+			return self.getNomesDoGrupo()
 		else:
-			return self.getPontosDoTime()
+			return "Comando informado nao existe."
 	
-	def prime(self):
-		print "n is a prime number\n"
-		return 1
+	def getDataHora(self):
+		now = datetime.now()
+		return str(now.day) + "/" + str(now.month) + "/" + str(now.year)
+
+	def getNomesDoGrupo(self):
+		return "Mateus Eisenkraemer e Roger Bianchini"
 		
-	def getPontosDoTime(self):
-		resposta = json.load(urllib2.urlopen("https://api.cartolafc.globo.com/time/FeelsGoodMan"))
-		print resposta
-		return resposta['pontos']
+	def getPontosDoTime(self, nomeDoTime):
+		timeCartola = json.load(urllib2.urlopen("https://api.cartolafc.globo.com/time/" + nomeDoTime))
+
+		atletasDoTime = "Lista de jogadores Escalados: \n"
+		for atleta in timeCartola['atletas']:
+			print atleta['nome']
+			atletasDoTime = atletasDoTime + "\n" + atleta['nome'].encode('utf-8')
+
+		return atletasDoTime
